@@ -137,7 +137,7 @@ export default {
     stopStreamedVideo(videoElem) {
       let stream = videoElem.srcObject;
       let tracks = stream.getTracks();
-      
+
       tracks.forEach(track => {
         // stops the video track
         track.stop();
@@ -165,7 +165,14 @@ export default {
     testMediaAccess() {
       navigator.mediaDevices
         .getUserMedia({video: true})
-        .then(stream => this.loadCameras())
+        .then(stream => {
+          let tracks = stream.getTracks();
+          tracks.forEach(track => {
+            // stops the video track
+            track.stop();
+          });
+          this.loadCameras()
+        })
         .catch(error => this.$emit('error', error));
     },
     /**
